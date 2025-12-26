@@ -1,4 +1,4 @@
-# Vizzy Labs Coding Challenge - Complete Scoring Sheet
+# Vizzy Labs Coding Challenge - Scoring Sheet
 
 **Candidate Name:** ___________________________
 **Position:** [ ] AI Automation Engineer  [ ] Mobile Backend Engineer
@@ -7,298 +7,146 @@
 
 ---
 
-## Pre-Interview Checklist
+## Evaluation Philosophy
 
-- [ ] Candidate screen sharing ready
-- [ ] Timer ready (15 min coding + 5-7 min discussion)
-- [ ] AI Workflow Evaluation framework accessible
-- [ ] Solution reference accessible (for your reference only)
+These challenges test **DECISION-MAKING**, not bug-fixing.
 
----
+The code works. There are no bugs to find.
+We evaluate how candidates approach business problems with AI assistance.
 
-# PART A: TECHNICAL EVALUATION (70 points)
-
-*Score only the challenge for the candidate's position*
+**Key Question: Did they direct AI, or did AI direct them?**
 
 ---
 
-## AI AUTOMATION ENGINEER CHALLENGE
+# SECTION A: PROBLEM DIAGNOSIS (25 points)
 
-### Bug Identification & Fixing (40 points)
+### Did they investigate and ask questions before coding?
 
-**Service Initialization (10 pts)**
-
-| Score | Criteria |
+| Score | Behavior |
 |-------|----------|
-| 9-10 | Fixed with proper lifespan/startup, dependency injection |
-| 6-8 | Fixed but not ideal pattern |
-| 3-5 | Partially fixed, service works |
-| 0-2 | Not addressed or still broken |
+| 23-25 | Asked 4+ questions, understood constraints, identified trade-offs |
+| 18-22 | Asked 2-3 good questions, reasonable understanding |
+| 12-17 | Asked 1 question, moved to coding quickly |
+| 6-11 | Briefly read README, went straight to AI/code |
+| 0-5 | No investigation, immediately asked AI "what's wrong?" |
 
-**Score: ___/10**
+**Score: ___/25**
 
-**Validation Issues (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | All validators (whitespace, empty creator_id, safety consistency) |
-| 6-8 | Two validators correct |
-| 3-5 | One validator correct |
-| 0-2 | No validators or incorrect |
-
-**Score: ___/10**
-
-**OpenAI Integration (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Extracts actual violation type AND confidence |
-| 6-8 | One correctly extracted |
-| 3-5 | Attempted fix but incorrect |
-| 0-2 | Not addressed |
-
-**Score: ___/10**
-
-**Fallback & Error Handling (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Full fallback chain with proper timeout handling |
-| 6-8 | Fallback works, minor issues |
-| 3-5 | Partial implementation |
-| 0-2 | No fallback or broken |
-
-**Score: ___/10**
-
-### Code Quality (20 points)
-
-**Async Patterns (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Proper async/await, asyncio.wait_for for timeout |
-| 6-8 | Mostly correct, minor issues |
-| 3-5 | Works but messy |
-| 0-2 | Incorrect patterns |
-
-**Score: ___/10**
-
-**Prompt Engineering for Anthropic (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Clear structured prompt, returns valid JSON |
-| 6-8 | Works but could be clearer |
-| 3-5 | Basic prompt, may have issues |
-| 0-2 | Poor or no prompt |
-
-**Score: ___/10**
-
-### Completion (10 points)
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | All features working |
-| 6-8 | Most features done |
-| 3-5 | Half complete |
-| 0-2 | Minimal completion |
-
-**Score: ___/10**
-
-**AI AUTOMATION TECHNICAL TOTAL: ___/70**
-
----
-
-## MOBILE BACKEND ENGINEER CHALLENGE
-
-### Performance Fix (40 points)
-
-**Problem Identification (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Correctly identified N+1 query pattern |
-| 6-8 | Identified "too many queries" generally |
-| 3-5 | Knew something was wrong, vague |
-| 0-2 | Couldn't identify the issue |
-
-**Score: ___/10**
-
-**Query Optimization (15 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 13-15 | Proper JOIN with GROUP BY, single query |
-| 9-12 | Works but not optimal |
-| 5-8 | Improved but still has issues |
-| 0-4 | No fix or still N+1 |
-
-**Score: ___/15**
-
-**Pagination (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Correct offset/limit using page params |
-| 6-8 | Works with calculation issues |
-| 3-5 | Attempted but incorrect |
-| 0-2 | No pagination |
-
-**Score: ___/10**
-
-**Response Time (5 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 5 | <500ms consistently |
-| 3-4 | 500-1000ms |
-| 1-2 | 1-2 seconds |
-| 0 | >2 seconds |
-
-**Score: ___/5**
-
-### Analytics Implementation (20 points)
-
-**Service Layer (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Efficient SQL, handles division by zero |
-| 6-8 | Works but calculates in Python |
-| 3-5 | Partial implementation |
-| 0-2 | Not implemented |
-
-**Score: ___/10**
-
-**Route & Schemas (10 pts)**
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Complete route with error handling, proper schemas |
-| 6-8 | Works, basic implementation |
-| 3-5 | Partial implementation |
-| 0-2 | Not implemented |
-
-**Score: ___/10**
-
-### Code Quality (10 points)
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Clean patterns, proper Pydantic, efficient SQLAlchemy |
-| 6-8 | Generally good, minor issues |
-| 3-5 | Works but messy |
-| 0-2 | Poor quality |
-
-**Score: ___/10**
-
-**MOBILE BACKEND TECHNICAL TOTAL: ___/70**
-
----
-
-# PART B: AI WORKFLOW EVALUATION (55 points)
-
-*Use the detailed AI_WORKFLOW_EVALUATION.md during discussion*
-
-### B1: Prompt Construction (10 pts)
-*"Walk me through how you structured your prompts to the AI"*
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Deliberate structure, provides context, iterates based on output |
-| 6-8 | Some reasoning, generally good prompts |
-| 3-5 | Vague or generic prompts |
-| 0-2 | No clear strategy, just accepting first output |
-
-**Score: ___/10**
+**Questions they asked:**
+1. _______________________________________________
+2. _______________________________________________
+3. _______________________________________________
 
 **Notes:** _______________________________________________
 
 ---
 
-### B2: Workflow & Planning (15 pts)
-*"What was your plan before starting? How did AI follow it?"*
+# SECTION B: DECISION QUALITY (30 points)
 
-| Score | Criteria |
+### Did they make a clear decision with reasoning?
+
+| Score | Behavior |
 |-------|----------|
-| 13-15 | Clear plan with priorities, noticed deviations, corrected AI |
-| 9-12 | Had a plan, some course correction |
-| 5-8 | Vague plan, mostly followed AI's lead |
-| 0-4 | No plan, started asking AI randomly |
+| 27-30 | Clear reasoning, addressed root cause, acknowledged trade-offs |
+| 21-26 | Good approach, explained reasoning, reasonable prioritization |
+| 15-20 | Okay approach, limited reasoning given |
+| 8-14 | Random approach, couldn't explain why |
+| 0-7 | No decision - did whatever AI suggested |
 
-**Score: ___/15**
+**Score: ___/30**
 
-**Notes:** _______________________________________________
+**What did they decide to tackle?**
+_______________________________________________
+
+**What was their reasoning?**
+_______________________________________________
+
+**Did they acknowledge trade-offs?** [ ] Yes [ ] Partially [ ] No
 
 ---
 
-### B3: Code Understanding (20 pts)
-*Pick a specific piece of code: "Explain what this does and why"*
+# SECTION C: AI DIRECTION (25 points)
 
-**Code asked about:** _______________________________________________
+### Did they DIRECT AI or did AI DIRECT them?
 
-| Score | Criteria |
-|-------|----------|
-| 17-20 | Explains fluently, understands concepts and trade-offs |
-| 12-16 | Generally understands, some gaps |
-| 6-11 | Surface-level, misses key concepts |
-| 0-5 | Cannot explain the code |
+**Positive Signals (check all that apply):**
+- [ ] Gave AI specific context/constraints (+5)
+- [ ] Told AI what to build, not asked AI what's wrong (+5)
+- [ ] Reviewed AI output before accepting (+5)
+- [ ] Made corrections to AI suggestions (+5)
+- [ ] Could explain AI-generated code fluently (+5)
+
+**Negative Signals (check all that apply):**
+- [ ] Asked AI "what's wrong with this code?" (-10)
+- [ ] Accepted AI output without reading it (-5)
+- [ ] Couldn't explain what AI-generated code does (-10)
+- [ ] Let AI make design decisions (-5)
+
+**Calculate: Start at 15, add positive points, subtract negative points**
+
+**Score: ___/25**
+
+**Notes on AI usage:**
+_______________________________________________
+
+---
+
+# SECTION D: TECHNICAL EXECUTION (20 points)
+
+### Did they implement something that works?
+
+| Score | Result |
+|-------|--------|
+| 18-20 | Code works, well-structured, addresses the issue |
+| 14-17 | Code mostly works, reasonable structure |
+| 10-13 | Code partially works, has some issues |
+| 5-9 | Code doesn't work well, poor structure |
+| 0-4 | Minimal progress, major issues |
 
 **Score: ___/20**
 
-**Notes:** _______________________________________________
+**What did they actually build?**
+_______________________________________________
 
 ---
 
-### B4: AI Correction Capability (10 pts)
-*"Did you have to correct anything the AI suggested?"*
-
-| Score | Criteria |
-|-------|----------|
-| 9-10 | Made meaningful corrections, has review process |
-| 6-8 | Some corrections or improvements |
-| 3-5 | Minor corrections only |
-| 0-2 | Accepted all AI output without changes |
-
-**Score: ___/10**
-
-**Notes:** _______________________________________________
-
----
-
-**AI WORKFLOW TOTAL: ___/55**
-
----
-
-# COMBINED SCORING
+# TOTAL SCORE
 
 | Section | Score | Max |
 |---------|-------|-----|
-| A: Technical | | 70 |
-| B: AI Workflow | | 55 |
-| **TOTAL** | | **125** |
+| A: Problem Diagnosis | | 25 |
+| B: Decision Quality | | 30 |
+| C: AI Direction | | 25 |
+| D: Technical Execution | | 20 |
+| **TOTAL** | | **100** |
 
 ---
 
-## Recommendation Matrix
+## Post-Coding Discussion
 
-| Technical (70) | AI Workflow (55) | Recommendation |
-|----------------|------------------|----------------|
-| 50+ (71%+) | 35+ (64%+) | **Strong Hire** |
-| 50+ (71%+) | 25-34 (45-63%) | **Hire** |
-| 42-49 (60-70%) | 35+ (64%+) | **Hire** |
-| 42-49 (60-70%) | 25-34 (45-63%) | **Maybe** - Discuss |
-| <42 (<60%) | Any | **No Hire** |
-| Any | <25 (<45%) | **No Hire** (black-box coder) |
+### "Walk me through what you built and why"
+**Quality:** [ ] Excellent [ ] Good [ ] Fair [ ] Poor
+**Notes:** _______________________________________________
+
+### "What trade-offs did you accept?"
+**Quality:** [ ] Excellent [ ] Good [ ] Fair [ ] Poor
+**Notes:** _______________________________________________
+
+### "Explain this code" (point to something AI generated)
+**Could they explain it?** [ ] Fluently [ ] Mostly [ ] Struggled [ ] Couldn't
 
 ---
 
-## Final Recommendation
+## Recommendation
 
-[ ] **Strong Hire** - Excellent technical + understands AI workflow
-[ ] **Hire** - Solid candidate, meets expectations
-[ ] **Maybe** - Discuss with team
-[ ] **No Hire** - Below minimum bar
+| Score | Recommendation |
+|-------|----------------|
+| 80-100 | **Strong Hire** |
+| 65-79 | **Hire** |
+| 50-64 | **Maybe** - Discuss |
+| <50 | **No Hire** |
+
+**Final Recommendation:** [ ] Strong Hire [ ] Hire [ ] Maybe [ ] No Hire
 
 ---
 
@@ -307,14 +155,12 @@
 **Key Strengths:**
 1. _______________________________________________
 2. _______________________________________________
-3. _______________________________________________
 
 **Concerns:**
 1. _______________________________________________
 2. _______________________________________________
 
-**Overall Notes:**
-_______________________________________________
+**Overall Notes (2-3 sentences):**
 _______________________________________________
 _______________________________________________
 

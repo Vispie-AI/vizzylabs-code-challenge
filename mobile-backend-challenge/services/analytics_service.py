@@ -12,5 +12,10 @@ class AnalyticsService:
         creator_id: int,
         limit: int = 10
     ) -> List[Dict]:
-        """Get top videos by engagement rate for a creator"""
-        pass
+        """
+        Get top videos by engagement rate for a creator.
+
+        Not yet implemented - needed for mobile analytics feature.
+        """
+        # TODO: Implement this when analytics feature is prioritized
+        return []

@@ -1,24 +1,58 @@
-# Mobile Backend Engineer Coding Challenge
+# Mobile Backend Engineer Challenge
 
 **Time Limit:** 15 minutes
 **Position:** Mobile Backend Engineer
 
+---
+
 ## Scenario
 
-**URGENT:** The mobile team just reported a critical issue with the Creator Discovery Feed API:
+You've joined Vizzy Labs as a Mobile Backend Engineer. The Creator Discovery API has been running in production for 6 months.
 
-**The Problem:**
-- The `/creators/feed` endpoint is extremely slow (taking 3-5 seconds)
-- Mobile users are complaining about app performance
-- The target response time should be under 500ms
+**The code works. The API responds quickly.**
 
-**Also Needed:**
-- A new video analytics endpoint to show top performing videos for a creator
-- The mobile team needs it for a new feature launch
+However, the mobile team has concerns...
 
 ---
 
-## Setup
+## The Situation
+
+**From Mobile Lead (in standup):**
+> "Users on slower connections (3G, poor WiFi) say the app feels sluggish even though your API response times look fine in our dashboards. The feed takes forever to appear. We've had to add loading spinners everywhere."
+
+**From Product Manager (via email):**
+> "We're launching creator analytics next sprint. We need an endpoint showing a creator's top performing videos. But more importantly - our mobile app's data usage is through the roof. Users are complaining about their data plans. Can we do something about response sizes?"
+
+**From iOS Developer (in Slack):**
+> "Every time I scroll the feed, I'm making a new request and parsing the same creator data over and over. Is there any way we can cache this better? Also, the response has like 15 fields per creator - we only show 4 in the list view."
+
+**From QA (bug report):**
+> "The feed sometimes shows duplicate creators when paginating. Not sure if it's frontend or backend."
+
+---
+
+## Your Task
+
+**You have 15 minutes.** The interviewer is your stakeholder - ask them questions.
+
+We want to see:
+
+1. **How do you diagnose these issues?**
+   - Multiple complaints, but are they the same root cause?
+   - What would you investigate first?
+   - What questions would you ask the mobile team?
+
+2. **What do you prioritize?**
+   - You can't fix everything in 15 minutes
+   - What's most important? Why?
+
+3. **Implement something**
+   - Pick the highest-impact improvement you can make
+   - Use AI to help code, but YOU decide what to build
+
+---
+
+## Current System
 
 ```bash
 cd mobile-backend-challenge
@@ -26,91 +60,49 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-The database will automatically seed with test data on startup (100 creators, 1000 videos).
+The database seeds automatically with 100 creators and 1000 videos.
 
-## Test the Slow Endpoint
-
+Test the feed:
 ```bash
-# This is currently SLOW - measure it
-time curl "http://localhost:8000/creators/feed?page=1&page_size=20"
+curl "http://localhost:8000/creators/feed?page=1&page_size=20"
 ```
 
 ---
 
-## Your Tasks
+## Files
 
-### Task 1: Fix the Slow Endpoint
+All files are functional. Modify whatever you think needs changing.
 
-The `/creators/feed` endpoint is unacceptably slow. Investigate why and fix it.
-
-**Files to examine:**
-- `services/creator_service.py` - The service layer
-- `routes/creators.py` - The route handler
-
-**Target:** Response time under 500ms
-
----
-
-### Task 2: Implement Analytics Endpoint
-
-Create an endpoint to get a creator's top performing videos by engagement.
-
-**Requirements:**
-- Endpoint: `GET /analytics/creator/{creator_id}/videos`
-- Return top 10 videos sorted by engagement rate
-- Engagement rate = (likes + comments) / views
-- Handle edge cases (e.g., videos with 0 views)
-
-**Files to implement:**
-- `services/analytics_service.py`
-- `routes/analytics.py`
+| File | Description |
+|------|-------------|
+| `main.py` | FastAPI application |
+| `routes/creators.py` | Creator feed endpoint |
+| `routes/analytics.py` | Analytics endpoint (stub) |
+| `services/creator_service.py` | Service layer |
+| `services/analytics_service.py` | Analytics service (stub) |
+| `schemas.py` | Pydantic response models |
+| `models.py` | SQLAlchemy models |
+| `database.py` | Database setup |
 
 ---
 
-### Task 3: Response Schemas
+## Important
 
-Create appropriate Pydantic response models for mobile optimization.
+**We are NOT looking for:**
+- You to "find the bug" (the code runs)
+- A perfect solution (none exists)
+- You to finish everything (impossible in 15 min)
 
-**File:** `schemas.py`
-
-Consider what fields a mobile app actually needs for:
-1. A list view of creators (scrolling feed)
-2. Video analytics display
-
----
-
-## Files Overview
-
-**Complete (no changes needed):**
-- `main.py` - FastAPI app setup
-- `database.py` - Database connection
-- `models.py` - SQLAlchemy models
-- `seed_data.py` - Test data generation
-
-**Needs Work:**
-- `services/creator_service.py` - Has performance issues
-- `services/analytics_service.py` - Needs implementation
-- `routes/analytics.py` - Needs implementation
-- `schemas.py` - Missing response models
+**We ARE looking for:**
+- How you think about mobile-specific constraints
+- Your prioritization under time pressure
+- Your ability to make decisions with incomplete information
+- Whether you can direct AI tools vs being directed by them
 
 ---
 
-## Testing
+## Remember
 
-```bash
-# Test the feed endpoint (should be fast after your fix)
-time curl "http://localhost:8000/creators/feed?page=1&page_size=20"
+**The API works. The question is: what should it do BETTER for mobile?**
 
-# Test analytics endpoint (after implementation)
-curl "http://localhost:8000/analytics/creator/1/videos"
-```
-
----
-
-## Notes
-
-- Use your AI coding assistant however you'd like
-- Focus on making it work and perform well
-- Feel free to ask clarifying questions
-
-Good luck!
+That's a design decision, not a bug fix.

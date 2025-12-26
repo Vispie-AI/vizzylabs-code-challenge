@@ -2,76 +2,48 @@
 
 **CONFIDENTIAL - DO NOT SHARE WITH CANDIDATES**
 
-This guide explains how to conduct technical interviews using the Vizzy Labs coding challenges, with a focus on evaluating AI-assisted development skills.
+---
+
+## Core Philosophy: Why This Format?
+
+**The Problem with Traditional Challenges:**
+Traditional coding challenges test bug-fixing skills. But AI can find and fix bugs instantly. If you give AI code and say "it's slow" or "has bugs", AI will:
+- Analyze the code structure
+- Identify patterns (N+1 queries, missing validation, etc.)
+- Propose exact fixes
+- Candidate just accepts → they proved nothing
+
+**Our Solution:**
+These challenges test what AI CANNOT do:
+1. **Make business decisions** - Trade-offs require human judgment
+2. **Interpret ambiguous requirements** - Conflicting stakeholder needs
+3. **Prioritize under constraints** - What matters most?
+4. **Design solutions** - Not "fix bugs" but "decide what to build"
+
+**The Key Insight:**
+> AI can execute. Humans must decide.
+
+Candidates should direct AI tools, not be directed by them.
 
 ---
 
-## Philosophy: Why This Format?
+## How These Challenges Work
 
-Traditional coding challenges test if someone can write code. But in an AI-assisted world, that's no longer the differentiator. We need to evaluate:
+### The Code is WORKING
+- No obvious bugs to find
+- System runs correctly
+- AI cannot "see" what needs to change
 
-1. **Can they leverage AI effectively?** - Not just "use AI" but direct it purposefully
-2. **Do they understand what they're building?** - Not black-box coding
-3. **Can they identify and correct AI mistakes?** - Critical oversight ability
-4. **Do they have a development process?** - Not just vibing
+### The Problem is BUSINESS-LEVEL
+- Conflicting requirements from stakeholders
+- Trade-offs with no "right" answer
+- Requires understanding context, not just code
 
-This challenge is intentionally designed with **minimal hints** so that:
-- Candidates must investigate the problem themselves
-- AI tools won't get a perfect solution from just the README
-- We can see how candidates think, not just how their AI thinks
-
----
-
-## Repository Structure
-
-```
-vizzylabs-code-challenge/
-├── README.md                           # Candidate-facing, minimal info
-│
-├── ai-automation-challenge/            # SHARE WITH CANDIDATES
-│   ├── README.md                       # Minimal hints, just describes problems
-│   ├── models.py                       # Has bugs (no hint comments)
-│   ├── moderation_service.py           # Incomplete (no hint comments)
-│   ├── main.py                         # Incomplete (no hint comments)
-│   ├── mock_clients.py                 # Working - don't modify
-│   └── requirements.txt
-│
-├── mobile-backend-challenge/           # SHARE WITH CANDIDATES
-│   ├── README.md                       # Minimal hints, just says "it's slow"
-│   ├── services/creator_service.py     # Has performance bugs (no hints)
-│   ├── services/analytics_service.py   # Stub (no hints)
-│   ├── routes/analytics.py             # Stub (no hints)
-│   ├── schemas.py                      # Incomplete (no hints)
-│   └── [other files - working]
-│
-└── internal/                           # NEVER SHARE - EVALUATOR ONLY
-    ├── INTERVIEWER_GUIDE.md            # This file
-    ├── INTERVIEWER_SCORING_SHEET.md    # Technical scoring rubric
-    ├── AI_WORKFLOW_EVALUATION.md       # AI usage evaluation framework
-    ├── SETUP_GUIDE.md                  # Setup and troubleshooting
-    └── solutions/
-        ├── ai-automation-challenge/
-        │   └── SOLUTION_REFERENCE.md   # Complete solutions
-        └── mobile-backend-challenge/
-            └── SOLUTION_REFERENCE.md   # Complete solutions
-```
-
----
-
-## What Candidates See vs What They Don't
-
-### Candidates SEE:
-- Brief problem description ("it's slow", "has bugs")
-- File locations to investigate
-- Setup instructions
-- Time limit
-
-### Candidates DON'T SEE:
-- What the specific bugs are (no "N+1 problem" mentions)
-- Solution code or hints
-- Evaluation criteria
-- Scoring breakdown
-- This interviewer guide
+### Candidates Must DECIDE
+- What problem to solve first
+- What approach to take
+- What trade-offs to accept
+- AI helps execute their decision
 
 ---
 
@@ -79,262 +51,243 @@ vizzylabs-code-challenge/
 
 ### Total Time: ~22 minutes
 
-| Phase | Duration | What Happens |
-|-------|----------|--------------|
-| Setup | 1 min | Candidate shares screen, confirms setup |
-| Coding | 15 min | Candidate works on challenge |
-| AI Workflow Discussion | 5-7 min | You evaluate their AI process |
-| Wrap Up | 1 min | Thank them, explain next steps |
+| Phase | Duration | Your Role |
+|-------|----------|-----------|
+| Setup | 1 min | Confirm they can run the code |
+| Diagnosis | 3-5 min | Act as stakeholder, answer questions |
+| Decision | 2-3 min | Listen to their proposal |
+| Implementation | 7-10 min | Observe how they use AI |
+| Discussion | 5 min | Evaluate their reasoning |
+
+### Your Role as Stakeholder
+
+You are NOT just observing. You are playing the role of PM/stakeholder:
+
+**When they ask questions, provide context:**
+- "What's the creator churn rate?" → "About 5% of flagged creators leave within a week"
+- "How many requests per second?" → "About 1000 at peak, mostly mobile"
+- "What's the budget for this?" → "We need something shippable this sprint"
+
+**When they propose solutions:**
+- Ask clarifying questions
+- Present trade-offs: "But what about X?"
+- Don't tell them if they're "right" - there is no single right answer
 
 ---
 
-## Before the Interview
-
-### Candidate Requirements
-- [ ] Repository cloned
-- [ ] Python 3.9+ installed
-- [ ] AI coding tool ready (Cursor, Copilot, Claude Code, etc.)
-- [ ] Screen share working
-- [ ] Can run uvicorn
-
-### Your Requirements
-- [ ] This guide open
-- [ ] Scoring sheet ready (from internal/INTERVIEWER_SCORING_SHEET.md)
-- [ ] AI Workflow Evaluation sheet (from internal/AI_WORKFLOW_EVALUATION.md)
-- [ ] Solution reference accessible (for your reference only)
-- [ ] Timer ready
-- [ ] Note-taking tool
-
----
-
-## During the Coding Phase (15 minutes)
-
-### What to Observe (Take Notes)
-
-**AI Interaction Patterns:**
-- How do they prompt the AI?
-- Do they read AI output before accepting?
-- Do they iterate on prompts?
-- Do they make manual corrections?
-
-**Problem-Solving Approach:**
-- Do they investigate before asking AI to fix?
-- Do they understand the problem first?
-- Do they test their changes?
-- Do they prioritize effectively?
-
-**Technical Skills:**
-- Do they understand the code they're generating?
-- Can they spot issues in AI output?
-- Do they follow patterns in the codebase?
-
-### When to Intervene
-
-**DO intervene if:**
-- Stuck for >3 minutes with no progress
-- Completely wrong path that wastes remaining time
-- Misunderstood the problem entirely
-
-**DON'T intervene to:**
-- Give away solutions
-- Tell them about specific bugs
-- Suggest AI prompts
-
-**Sample hints (if needed):**
-- "Have you looked at [specific file] yet?"
-- "What do you think might be causing the slowness?"
-- "Maybe test that change before moving on"
-
----
-
-## Post-Coding Discussion (5-7 minutes)
-
-**This is critical.** Use the AI Workflow Evaluation Framework to assess:
-
-### 1. Prompt Construction (1-2 minutes)
-Ask: "Walk me through how you structured your prompts to the AI."
-
-Listen for:
-- Deliberate vs random prompting
-- Context-setting before requests
-- Iteration based on output
-
-### 2. Workflow & Planning (1-2 minutes)
-Ask: "Before you started, what was your plan? How did the AI follow it?"
-
-Listen for:
-- Had a mental model before starting
-- Noticed when AI deviated
-- Corrected course when needed
-
-### 3. Code Understanding (2-3 minutes)
-Pick a specific piece of AI-generated code and ask: "Explain what this does and why."
-
-Listen for:
-- Can they explain the code fluently?
-- Do they understand the underlying concepts?
-- Do they know trade-offs?
-
----
-
-## Challenge-Specific Notes
+## Challenge Details
 
 ### AI Automation Challenge
 
-**The Hidden Bugs:**
-1. `models.py`: Missing validators for whitespace content, empty creator_id, safety/violation consistency
-2. `moderation_service.py`: Hardcoded confidence, always returns NONE violation, no fallback chain, no error handling
-3. `main.py`: Service never initialized, no timing, no error handling
+**The Situation:**
+Working moderation service with conflicting stakeholder feedback:
+- Creator team: Too many false positives (legitimate content flagged)
+- Trust & Safety: Too many false negatives (harmful content passes)
+- Engineering: No transparency or tunability
 
-**What Good Candidates Notice:**
-- Service is None on startup (will crash)
-- OpenAI results aren't using actual API data
-- There's an Anthropic client but it's never called
-- No timeout handling
+**What Good Candidates Do:**
+1. Ask questions to understand the problem
+   - "How often do false positives happen?"
+   - "What categories have the most issues?"
+   - "Is there a human review process?"
 
-**AI Will Struggle With:**
-- Understanding the mock client interface without hints
-- Creating a good prompt for Anthropic without guidance
-- The cross-field validator pattern
+2. Propose a solution with reasoning
+   - "I'd add confidence thresholds because..."
+   - "We should implement human review for borderline cases..."
+   - "Let me add logging first to understand the patterns..."
+
+3. Implement with AI help
+   - They tell AI WHAT to build
+   - They review and adjust AI output
+   - They can explain why the code does what it does
+
+**What Weak Candidates Do:**
+- Immediately ask AI "what's wrong with this code?"
+- Accept whatever AI suggests
+- Can't explain trade-offs
+- Don't ask any clarifying questions
+
+**Good Solutions Include:**
+- Confidence thresholds
+- Category-specific handling
+- Human review queue
+- Better prompting for edge cases
+- Logging/observability
+- Appeal mechanism
+
+All are valid. We evaluate REASONING, not specific implementation.
+
+---
 
 ### Mobile Backend Challenge
 
-**The Hidden Bugs:**
-1. `creator_service.py`: N+1 query (queries all creators, then loops), no pagination used, possible duplicates
-2. `schemas.py`: Missing response models
-3. `analytics_service.py` & `routes/analytics.py`: Empty stubs
+**The Situation:**
+Working API with conflicting mobile team feedback:
+- Slow on poor connections (but API is fast)
+- High data usage (response payload size)
+- No caching (repeated requests)
+- Duplicate creators sometimes (pagination edge case)
+- Need new analytics endpoint
 
-**What Good Candidates Notice:**
-- The endpoint is slow (they should test it)
-- Pagination parameters exist but aren't used
-- The code loads everything then filters in Python
+**What Good Candidates Do:**
+1. Investigate before coding
+   - Check response size (it's large!)
+   - Ask about caching requirements
+   - Understand mobile-specific constraints
 
-**AI Will Struggle With:**
-- Identifying N+1 without explicit hints
-- Understanding the pagination should use offset/limit
-- Creating efficient SQLAlchemy queries
+2. Prioritize with reasoning
+   - "Payload size affects all users, I'll tackle that first"
+   - "The analytics endpoint is needed for launch, but optimization affects existing users..."
+
+3. Make design decisions
+   - Create optimized response schema (fewer fields)
+   - Add cache headers
+   - Implement cursor-based pagination
+   - Choose what to implement given time constraints
+
+**What Weak Candidates Do:**
+- Ask AI "what's wrong with this API?"
+- Focus on code style instead of architecture
+- Don't ask about mobile constraints
+- Try to do everything without prioritizing
+
+**Good Solutions Include:**
+- Mobile-optimized response schemas (fewer fields)
+- Cache-Control headers
+- ETag support
+- Smaller page sizes
+- Cursor-based vs offset pagination
+- Analytics endpoint implementation
+
+All are valid approaches. We evaluate PRIORITIZATION and REASONING.
 
 ---
 
-## Scoring
+## Evaluation Framework
 
-### Use Two Evaluation Tools:
+### What We're Actually Testing
 
-1. **Technical Scoring Sheet** (`internal/INTERVIEWER_SCORING_SHEET.md`)
-   - Evaluates: code quality, bug fixes, completeness
-   - Max: 100 points
+| Skill | What to Look For |
+|-------|------------------|
+| **Problem Diagnosis** | Do they ask questions? Investigate before coding? |
+| **Decision Making** | Can they choose between trade-offs? Explain why? |
+| **Prioritization** | Do they pick high-impact work? Manage time well? |
+| **AI Direction** | Do they tell AI what to build, or ask AI what's wrong? |
+| **Technical Understanding** | Can they explain the code they wrote? |
 
-2. **AI Workflow Evaluation** (`internal/AI_WORKFLOW_EVALUATION.md`)
-   - Evaluates: prompt construction, planning, understanding
-   - Max: 55 points
+### Scoring Signals
 
-### Combined Assessment
+**Strong Hire Signals:**
+- Asks 3+ clarifying questions before coding
+- Proposes solution with clear reasoning
+- Prioritizes effectively ("I'm doing X first because...")
+- Directs AI with specific instructions
+- Can explain all code they wrote
+- Acknowledges trade-offs
 
-| Technical Score | AI Workflow Score | Recommendation |
-|----------------|-------------------|----------------|
-| 70+ | 35+ | **Strong Hire** |
-| 70+ | 25-34 | **Hire** (coach on AI practices) |
-| 60-69 | 35+ | **Hire** (coach on technical) |
-| 60-69 | 25-34 | **Maybe** (discuss with team) |
-| <60 | Any | **No Hire** |
-| Any | <25 | **No Hire** (black-box coder) |
+**Hire Signals:**
+- Some clarifying questions
+- Reasonable approach
+- Uses AI effectively for execution
+- Can explain most of what they built
+
+**No Hire Signals:**
+- "Let me ask AI what's wrong" (AI-led, not human-led)
+- Can't explain code they wrote
+- No prioritization - tries random things
+- Doesn't ask any questions
+- Gets defensive when asked about trade-offs
 
 ---
 
-## Key Signals
+## Running the Interview
 
-### Green Flags (Hire)
-- Investigates the problem before asking AI to fix
-- Iterates on AI prompts when output isn't right
-- Makes manual corrections to AI output
-- Can explain all code they "wrote"
-- Had a plan and followed it
-- Tests changes before moving on
+### Phase 1: Setup (1 min)
+"The challenge presents a working system with business problems. Your job is to diagnose and improve it. I'll act as your stakeholder - ask me questions."
 
-### Red Flags (No Hire)
-- "Just asked AI to fix everything"
-- Can't explain what specific code does
-- No plan, just started asking AI
-- Accepted all AI output without review
-- Over-reliant: "I couldn't do this without AI"
-- Gets defensive about AI choices
+### Phase 2: Diagnosis (3-5 min)
+Let them read the README and ask questions. Answer as if you're the PM/mobile lead/etc.
 
-### Yellow Flags (Discuss)
-- Good technical output but poor AI workflow
-- Strong AI workflow but incomplete technical solution
-- Can explain some code but not all
-- Some planning but not followed through
+Good sign: They ask questions
+Bad sign: They immediately start coding
+
+### Phase 3: Decision (2-3 min)
+Ask: "What do you think the main issues are? What would you tackle first?"
+
+Listen for reasoning, not just answers.
+
+### Phase 4: Implementation (7-10 min)
+Observe how they use AI:
+- Do they give AI context and direction?
+- Do they review AI output?
+- Do they make corrections?
+
+### Phase 5: Discussion (5 min)
+- "Walk me through what you built and why"
+- "What trade-offs did you make?"
+- "What would you do differently with more time?"
+- "Explain this specific piece of code"
 
 ---
 
 ## Common Scenarios
 
-### Candidate Finishes Early
-- Ask them to improve or refactor something
-- Ask more in-depth AI workflow questions
-- Have them explain trade-offs of their approach
+### "The code looks fine to me"
+Say: "The mobile team is still having issues. What might cause sluggishness even if the API is fast?"
 
-### Candidate Struggles Throughout
-- Give hints at 3+ minute stuck points
-- Evaluate what they DID complete thoroughly
-- Focus discussion on their process and thinking
+This tests if they think beyond code to user experience.
 
-### AI Tool Breaks/Slow
-- Note in evaluation
-- Give extra time if significant (1-2 minutes)
-- Don't penalize for tool issues
+### They immediately ask AI "what's wrong?"
+Let them. But in discussion, ask: "What did you think the problem was before AI analyzed it?"
 
-### Candidate Wants to Use Different Tool
-- That's fine, any AI tool is acceptable
-- Note which tool they used
+This reveals if they're thinking or just vibing.
+
+### They finish early
+Ask them to improve their solution or add another feature. Or go deeper on discussion questions.
+
+### They're stuck
+Give business-level hints, not code hints:
+- "What do mobile users care about most?"
+- "How might payload size affect 3G users?"
+- "What happens when the same creator ranks differently on different pages?"
 
 ---
 
 ## After the Interview
 
-1. Complete Technical Scoring Sheet
-2. Complete AI Workflow Evaluation
-3. Write 2-3 sentence summary
-4. Make recommendation with rationale
-5. Note any specific strengths/concerns
-6. Submit evaluation to hiring platform
+### Complete Evaluation
+1. **Decision Quality** (30 points): Did they make good choices?
+2. **Reasoning** (25 points): Could they explain their thinking?
+3. **AI Usage** (25 points): Did they direct AI or follow AI?
+4. **Technical Execution** (20 points): Does the code work?
+
+### Recommendation Matrix
+
+| Decision + Reasoning | AI Usage | Recommendation |
+|---------------------|----------|----------------|
+| Strong | Strong | **Strong Hire** |
+| Strong | Weak | **Hire** (coach on AI) |
+| Weak | Strong | **Maybe** (smart but not thinking) |
+| Weak | Weak | **No Hire** |
 
 ---
 
-## Resetting for Next Candidate
+## Key Takeaway
 
-```bash
-# Reset code files
-git checkout ai-automation-challenge/
-git checkout mobile-backend-challenge/
+**We're not testing if they can write code.**
+**We're testing if they can decide WHAT code to write.**
 
-# Database is in-memory, restarts automatically
-```
+AI can write code. We need people who can:
+- Understand business problems
+- Make decisions with incomplete information
+- Prioritize under constraints
+- Direct AI tools effectively
+- Explain their reasoning
 
----
-
-## FAQ
-
-**Q: What if the candidate doesn't use AI at all?**
-A: That's fine for the technical portion. Note it in AI Workflow as "chose not to use AI" and evaluate based on their reasoning. Strong manual coders are still valuable.
-
-**Q: What if they look at the internal/ folder?**
-A: This shouldn't happen if you share the repo correctly (exclude internal/). If it does, the interview is compromised - reschedule with awareness.
-
-**Q: What if AI gives them a perfect solution immediately?**
-A: With the minimal hints in our README, this is unlikely. If it happens, the AI Workflow questions will reveal if they understand the solution. "AI luck" without understanding is still a red flag.
-
-**Q: How strict should I be on time?**
-A: At 15 minutes, give a 1-minute warning. At 16 minutes, stop coding. The time constraint is part of the evaluation.
+That's what these challenges measure.
 
 ---
 
 ## Contact
 
-Questions about this interview process:
-- Slack: #eng-hiring
-- Email: hiring@vizzylabs.com
-
----
-
-*Remember: We're evaluating potential teammates, not just code. Technical skill AND how they work with AI matters.*
+Questions: #eng-hiring on Slack
