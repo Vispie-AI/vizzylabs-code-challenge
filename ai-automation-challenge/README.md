@@ -1,221 +1,98 @@
-# AI Automation Engineer Coding Challenge
+# AI Automation Engineer Challenge
 
-**Time Limit:** 10-15 minutes
-**Position:** AI Automation Engineer (Intern/Junior)
-**Difficulty:** Intermediate
+**Time Limit:** 15 minutes
+**Position:** AI Automation Engineer
+
+---
 
 ## Scenario
 
-You're building a **content moderation service** for Vizzy Labs that analyzes creator video descriptions for policy violations. The service needs to:
-- Use multiple AI providers (OpenAI primary, Anthropic Claude fallback)
-- Return structured results with confidence scores
-- Handle errors, timeouts, and rate limits gracefully
+You've joined Vizzy Labs and inherited a content moderation service. The service is **functional** - it runs, accepts requests, and returns results.
 
-Your predecessor left the code incomplete with several bugs. Your job is to **fix the bugs and complete the implementation**.
+However, the business has concerns...
 
 ---
 
-## Setup
+## The Situation
 
-### 1. Install Dependencies
+**From the Creator Success Team (via Slack):**
+> "We're getting ~50 support tickets/week from creators whose content is incorrectly flagged. One cooking video was flagged as 'violence' (chopping vegetables). A fitness creator got flagged for 'adult content' (shirtless workout). Creators are threatening to leave the platform."
+
+**From Trust & Safety (in a meeting):**
+> "We had a video promoting dangerous supplements reach 100K views before we caught it. Our moderation also missed some borderline hate speech last month. We need to be MORE aggressive, not less."
+
+**From your Engineering Manager:**
+> "Both teams are right. We also have no visibility into WHY decisions are made. When Legal asks 'why was this flagged?', we can't answer. We need the system to be more transparent and tunable."
+
+---
+
+## Your Task
+
+**You have 15 minutes.** The interviewer is your stakeholder - ask them questions.
+
+We want to see:
+
+1. **How do you approach this problem?**
+   - These requirements conflict. How do you think about the trade-offs?
+   - What questions would you ask? What data would you want?
+
+2. **What do you propose?**
+   - There's no single "right" answer
+   - We want to understand YOUR reasoning
+
+3. **Implement something**
+   - Once you've decided what to do, build it
+   - AI can help you code, but YOU must decide what to code
+
+---
+
+## Current System
+
 ```bash
 cd ai-automation-challenge
 pip install -r requirements.txt
-```
-
-### 2. Run the Application
-```bash
 uvicorn main:app --reload
 ```
 
-### 3. Test the API
+Test it:
 ```bash
 curl -X POST "http://localhost:8000/moderate" \
   -H "Content-Type: application/json" \
-  -d '{
-    "content": "Check out my awesome video!",
-    "creator_id": "creator123",
-    "video_id": "video456"
-  }'
+  -d '{"content": "Check out my cooking tutorial!", "creator_id": "chef123"}'
 ```
 
----
-
-## Your Tasks
-
-### 🐛 Task 1: Fix Validation Bugs (3-4 minutes)
-
-**File:** `models.py`
-
-**Issues to fix:**
-1. Content can be whitespace-only (add validator)
-2. `creator_id` can be empty string (add validator)
-3. No validation that `is_safe=True` must have `violation_type=NONE` (add validator)
-
-**Hints:**
-- Use `@validator` decorator from Pydantic
-- Use `validator('field_name')` for single fields
-- Use `validator('field', 'field2')` with `values` parameter for cross-field validation
+The system works. It returns moderation results. The question is whether it's doing the RIGHT thing.
 
 ---
 
-### 🔧 Task 2: Fix OpenAI Integration (2-3 minutes)
+## Files
 
-**File:** `moderation_service.py` → `_moderate_with_openai()`
+All files are functional. Modify whatever you think needs changing.
 
-**Issues to fix:**
-1. Confidence is hardcoded to `0.9` (should use actual scores from API)
-2. Violation type is always `NONE` (should extract from categories)
-3. Reasoning is generic (should be specific)
-
-**Hints:**
-- Check `result.category_scores` for confidence values
-- Check `result.categories` dictionary for flagged categories
-- Map OpenAI categories to `ViolationType` enum values
+| File | Description |
+|------|-------------|
+| `main.py` | FastAPI application |
+| `moderation_service.py` | Core moderation logic |
+| `models.py` | Data models |
+| `mock_clients.py` | Simulates AI APIs (realistic behavior) |
 
 ---
 
-### ✨ Task 3: Implement Anthropic Fallback (4-5 minutes)
+## Important
 
-**File:** `moderation_service.py`
+**We are NOT looking for:**
+- Bug fixes (the code runs fine)
+- A "perfect" solution (none exists)
+- Impressive code (simple is better)
 
-**Implement these methods:**
-
-#### `_moderate_with_anthropic(content: str) -> ModerationResult`
-- Call Anthropic Claude API with a prompt
-- Parse the structured JSON response
-- Return `ModerationResult` with `provider="anthropic"`
-
-#### `_parse_llm_response(response_text: str) -> dict`
-- Parse JSON from LLM response text
-- Handle JSON parsing errors gracefully
-- Return parsed dictionary
-
-**Prompt Engineering:**
-Your prompt should:
-- Ask for structured JSON output
-- Match the `ModerationResult` schema
-- Include field descriptions
-- Handle edge cases
-
-**Example Prompt Structure:**
-```
-Analyze this content for policy violations. Return JSON with this exact structure:
-{
-  "is_safe": boolean,
-  "confidence": float (0.0-1.0),
-  "violation_type": "hate_speech" | "violence" | "adult_content" | "spam" | "none",
-  "reasoning": "brief explanation"
-}
-
-Content: {content}
-
-Respond only with valid JSON.
-```
+**We ARE looking for:**
+- How you think about conflicting requirements
+- Your ability to make decisions with incomplete information
+- Whether you can direct AI tools vs being directed by them
+- Your reasoning and trade-off analysis
 
 ---
 
-### 🔗 Task 4: Implement Fallback Chain (3-4 minutes)
+## Hints for the Interviewer (Candidate: Ignore This)
 
-**File:** `moderation_service.py` → `moderate_content()`
-
-**Implement:**
-1. Try OpenAI first with timeout (`asyncio.wait_for`)
-2. If OpenAI fails/times out, fallback to Anthropic
-3. If both fail, raise appropriate error
-4. Handle all exceptions properly
-
-**Hints:**
-- Use `asyncio.wait_for(coro, timeout=self.timeout)`
-- Catch specific exceptions: `asyncio.TimeoutError`, `Exception`
-- Log errors for debugging
-
----
-
-### 🚀 Task 5: Fix FastAPI Setup (2-3 minutes)
-
-**File:** `main.py`
-
-**Issues to fix:**
-1. Service is not initialized (it's `None`)
-2. No API keys loaded (use environment variables or defaults)
-3. No timing tracking in endpoint
-4. No error handling in endpoint
-
-**Implement:**
-- Lifespan context manager to initialize service on startup
-- Dependency injection pattern for service
-- Track processing time (start time → end time)
-- Add try-except in endpoint
-
----
-
-## Evaluation Criteria
-
-### AI Coding Ability (25 points)
-- [ ] Used AI assistant effectively (10 pts)
-- [ ] Production-quality async code (10 pts)
-- [ ] Completion rate (5 pts)
-
-### Prompting Ability (25 points)
-- [ ] Claude prompt structure is correct (15 pts)
-- [ ] Prompt quality and clarity (10 pts)
-
-### Debugging Ability (20 points)
-- [ ] Fixed Pydantic validation bugs (8 pts)
-- [ ] Fixed OpenAI integration issues (7 pts)
-- [ ] Fixed initialization bugs (5 pts)
-
-### Multi-tasking (15 points)
-- [ ] Error handling across layers (5 pts)
-- [ ] Timeout implementation (5 pts)
-- [ ] Fallback chain logic (5 pts)
-
-### System Thinking (15 points)
-- [ ] Smart trade-offs and prioritization (5 pts)
-- [ ] Follows service layer pattern (5 pts)
-- [ ] Code is maintainable (5 pts)
-
-**Minimum Passing Score:** 70/100
-
----
-
-## Tips for Success
-
-1. **Start with the obvious bugs** - Fix validation first, it's quickest
-2. **Use AI effectively** - Let it generate boilerplate, you focus on logic
-3. **Test incrementally** - Fix one thing, test it, move on
-4. **Prioritize completion** - A working partial solution beats perfect incomplete code
-5. **Communicate your thinking** - Explain your approach as you code
-
----
-
-## Files Overview
-
-- `models.py` - Pydantic models with validation **[HAS BUGS]**
-- `moderation_service.py` - Core business logic **[INCOMPLETE + BUGS]**
-- `main.py` - FastAPI application **[INCOMPLETE]**
-- `mock_clients.py` - Mock OpenAI/Anthropic clients **[PROVIDED, WORKING]**
-- `requirements.txt` - Dependencies **[PROVIDED]**
-
----
-
-## Expected Behavior
-
-After your fixes, the API should:
-- ✅ Reject whitespace-only content
-- ✅ Reject empty creator_id
-- ✅ Return accurate confidence scores from OpenAI
-- ✅ Extract actual violation types from OpenAI
-- ✅ Fall back to Anthropic when OpenAI fails
-- ✅ Handle timeouts gracefully
-- ✅ Track processing time accurately
-- ✅ Validate that safe content has violation_type=NONE
-
----
-
-## Good Luck!
-
-Remember: This challenge tests your **AI coding**, **debugging**, **prompting**, and **system thinking** skills. Use your AI assistant wisely and show us how you approach real-world problems!
-
-**Questions during the interview?** Just ask! We're here to help clarify (but not solve it for you 😉).
+*If candidate asks good questions, share relevant context. If they dive straight into code without understanding the problem, that's a signal.*

@@ -1,39 +1,48 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from contextlib import asynccontextmanager
 import time
 from models import ModerationRequest, ModerationResponse
 from moderation_service import ModerationService
 import os
 
-# TODO: Implement proper lifespan context manager for service initialization
-app = FastAPI(title="Content Moderation API")
 
-# BUG: Service is not initialized properly (no API keys)
-# BUG: Service should be dependency-injected, not global
-moderation_service = None
+_service: ModerationService = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize service on startup"""
+    global _service
+    _service = ModerationService(
+        openai_key=os.getenv("OPENAI_API_KEY", "mock-key"),
+        anthropic_key=os.getenv("ANTHROPIC_API_KEY", "mock-key")
+    )
+    print("Moderation service initialized")
+    yield
+    print("Shutting down")
+
+
+app = FastAPI(title="Content Moderation API", lifespan=lifespan)
 
 
 @app.post("/moderate", response_model=ModerationResponse)
 async def moderate_content(request: ModerationRequest):
-    """
-    Moderate content for policy violations.
+    """Moderate content for policy violations."""
+    start_time = time.time()
 
-    TODO: Add proper error handling
-    TODO: Add request validation
-    TODO: Track processing time
-    """
-    # BUG: No error handling
-    # BUG: No timing tracking
-    # BUG: Doesn't handle service being None
+    try:
+        result = await _service.moderate_content(request)
+        processing_time = (time.time() - start_time) * 1000
 
-    result = await moderation_service.moderate_content(request)
-
-    return ModerationResponse(
-        video_id=request.video_id,
-        moderation=result,
-        processing_time_ms=0.0  # BUG: Should track actual time
-    )
+        return ModerationResponse(
+            video_id=request.video_id,
+            moderation=result,
+            processing_time_ms=round(processing_time, 2)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-# TODO: Add health check endpoint
-# TODO: Add lifespan event handlers
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}

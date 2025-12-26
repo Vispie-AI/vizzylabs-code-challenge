@@ -15,10 +15,6 @@ class ModerationRequest(BaseModel):
     creator_id: str
     video_id: Optional[str] = None
 
-    # BUG: Missing validator to ensure content isn't just whitespace
-    # BUG: creator_id should be validated (not empty string)
-    # TODO: Add validators here
-
 class ModerationResult(BaseModel):
     """Structured AI moderation result"""
     is_safe: bool
@@ -26,9 +22,6 @@ class ModerationResult(BaseModel):
     violation_type: ViolationType
     reasoning: str
     provider: str  # "openai" or "anthropic"
-
-    # BUG: Missing validation - if is_safe=True, violation_type should be NONE
-    # TODO: Add validator here
 
 class ModerationResponse(BaseModel):
     """API response model"""

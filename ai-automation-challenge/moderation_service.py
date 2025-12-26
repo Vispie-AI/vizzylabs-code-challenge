@@ -1,58 +1,49 @@
 import asyncio
-import time
 from typing import Optional
-import json
 from models import ModerationRequest, ModerationResult, ViolationType
 from mock_clients import MockOpenAIClient, MockAnthropicClient
 
 
 class ModerationService:
+    """
+    Content moderation service using OpenAI's moderation API.
+
+    Current behavior:
+    - Uses OpenAI moderation API
+    - Returns binary safe/unsafe decision
+    - Threshold is hardcoded
+    """
+
     def __init__(self, openai_key: str, anthropic_key: str):
         self.openai_client = MockOpenAIClient(api_key=openai_key)
         self.anthropic_client = MockAnthropicClient(api_key=anthropic_key)
-        self.max_retries = 2
-        self.timeout = 5.0
+        self.confidence_threshold = 0.5  # Content flagged if any category > this
 
     async def moderate_content(self, request: ModerationRequest) -> ModerationResult:
-        """
-        Moderate content using OpenAI with Anthropic fallback.
-
-        TODO: Implement fallback chain logic
-        TODO: Add proper error handling
-        TODO: Add timeout handling
-        """
-        # BUG: No try-except for OpenAI call
-        # BUG: No timeout implementation
-        # BUG: Doesn't fallback to Anthropic on failure
-        result = await self._moderate_with_openai(request.content)
-        return result
-
-    async def _moderate_with_openai(self, content: str) -> ModerationResult:
-        """Call OpenAI moderation API"""
-        # INCOMPLETE: This uses the simple moderation endpoint
-        # TODO: Should use chat completions with structured output for detailed analysis
-
-        response = await self.openai_client.moderations.create(input=content)
+        """Moderate content using OpenAI."""
+        response = await self.openai_client.moderations.create(input=request.content)
         result = response.results[0]
 
-        # BUG: This is oversimplified - doesn't extract violation type properly
-        # BUG: confidence is always 0.9 - should be based on actual scores
+        # Get the highest scoring category
+        scores = result.category_scores
+        max_category = max(scores, key=lambda k: getattr(scores, k))
+        max_score = getattr(scores, max_category)
+
+        # Map OpenAI category to our violation type
+        violation_type = ViolationType.NONE
+        if result.flagged:
+            category_map = {
+                "hate": ViolationType.HATE_SPEECH,
+                "violence": ViolationType.VIOLENCE,
+                "sexual": ViolationType.ADULT_CONTENT,
+                "spam": ViolationType.SPAM,
+            }
+            violation_type = category_map.get(max_category, ViolationType.NONE)
+
         return ModerationResult(
             is_safe=not result.flagged,
-            confidence=0.9,  # BUG: Hardcoded
-            violation_type=ViolationType.NONE,  # BUG: Not extracting actual violation
-            reasoning="Content analyzed",  # BUG: Generic message
+            confidence=max_score,
+            violation_type=violation_type,
+            reasoning="Automated moderation check",
             provider="openai"
         )
-
-    async def _moderate_with_anthropic(self, content: str) -> ModerationResult:
-        """Call Anthropic Claude API as fallback"""
-        # MISSING: Complete implementation needed
-        # Should use Claude with a prompt that returns structured JSON
-        pass
-
-    def _parse_llm_response(self, response_text: str) -> dict:
-        """Parse structured JSON from LLM response"""
-        # MISSING: Implementation needed
-        # Should handle JSON parsing errors
-        pass
