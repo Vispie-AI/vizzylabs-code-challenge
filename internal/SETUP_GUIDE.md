@@ -4,60 +4,100 @@
 
 ---
 
-## Repository Structure
+## Quick Reference
+
+### Candidate Repos (Share with Candidates)
+
+| Track | Position | GitHub Repo |
+|-------|----------|-------------|
+| **AI Automation** | Intern | https://github.com/Vispie-AI/vizzy-ai-automation-challenge |
+| **Mobile Backend** | Full-time | https://github.com/Vispie-AI/vizzy-mobile-backend-challenge |
+
+### Interviewer Resources
+
+| Document | Purpose |
+|----------|---------|
+| `UNIFIED_INTERVIEW_GUIDE.md` | **Main guide** - All evaluation questions + scoring |
+| `solutions/` | Reference solutions (never share with candidates) |
+
+---
+
+## Repository Architecture
 
 ```
-vizzylabs-code-challenge/
-├── README.md                           ← CANDIDATE-FACING (minimal info)
-│
-├── ai-automation-challenge/            ← SHARE WITH CANDIDATES
-│   ├── README.md                       (minimal hints)
-│   ├── models.py                       (bugs, no hint comments)
-│   ├── moderation_service.py           (incomplete, no hints)
-│   ├── main.py                         (incomplete, no hints)
-│   ├── mock_clients.py                 (working)
-│   └── requirements.txt
-│
-├── mobile-backend-challenge/           ← SHARE WITH CANDIDATES
-│   ├── README.md                       (minimal hints - "it's slow")
-│   ├── services/creator_service.py     (bugs, no hints)
-│   ├── services/analytics_service.py   (stub)
-│   ├── routes/analytics.py             (stub)
-│   ├── schemas.py                      (incomplete)
-│   └── [other working files]
-│
-└── internal/                           ← NEVER SHARE
-    ├── INTERVIEWER_GUIDE.md            (main guide)
-    ├── INTERVIEWER_SCORING_SHEET.md    (scoring)
-    ├── AI_WORKFLOW_EVALUATION.md       (AI usage eval)
-    ├── SETUP_GUIDE.md                  (this file)
-    └── solutions/
-        ├── ai-automation-challenge/
-        │   └── SOLUTION_REFERENCE.md
-        └── mobile-backend-challenge/
-            └── SOLUTION_REFERENCE.md
+┌─────────────────────────────────────────────────────────────────┐
+│                    INTERVIEWER REPO (this one)                   │
+│              github.com/Vispie-AI/vizzylabs-code-challenge      │
+│                                                                  │
+│  ├── ai-automation-challenge/    ← Source code                  │
+│  ├── mobile-backend-challenge/   ← Source code                  │
+│  └── internal/                   ← NEVER SHARE                  │
+│      ├── UNIFIED_INTERVIEW_GUIDE.md                             │
+│      ├── SETUP_GUIDE.md (this file)                             │
+│      ├── solutions/              ← Reference answers            │
+│      └── archive/                ← Old evaluation docs          │
+└─────────────────────────────────────────────────────────────────┘
+           │
+           │ Separate repos (only code, no solutions)
+           ▼
+┌──────────────────────────────┐  ┌──────────────────────────────┐
+│     CANDIDATE REPO #1         │  │     CANDIDATE REPO #2         │
+│  vizzy-ai-automation-challenge│  │ vizzy-mobile-backend-challenge│
+│                               │  │                               │
+│  ✓ README.md                  │  │  ✓ README.md                  │
+│  ✓ Source code                │  │  ✓ Source code                │
+│  ✓ requirements.txt           │  │  ✓ requirements.txt           │
+│  ✗ NO solutions               │  │  ✗ NO solutions               │
+│  ✗ NO internal guides         │  │  ✗ NO internal guides         │
+└──────────────────────────────┘  └──────────────────────────────┘
 ```
 
 ---
 
-## Sharing with Candidates
+## Before the Interview
 
-**What to share:**
-- Root `README.md`
-- `ai-automation-challenge/` (entire folder)
-- `mobile-backend-challenge/` (entire folder)
+### 1. Invite Candidate to Repo
 
-**What to NEVER share:**
-- `internal/` folder (contains solutions and evaluation materials)
+**For AI Automation Challenge (Intern):**
+```bash
+gh api repos/Vispie-AI/vizzy-ai-automation-challenge/collaborators/GITHUB_USERNAME \
+  -X PUT -f permission=push
+```
 
-**Recommended approach:**
-1. Clone the repo
-2. Delete the `internal/` folder before sharing
-3. Or use a separate branch/repo for candidates
+**For Mobile Backend Challenge (Full-time):**
+```bash
+gh api repos/Vispie-AI/vizzy-mobile-backend-challenge/collaborators/GITHUB_USERNAME \
+  -X PUT -f permission=push
+```
+
+Or manually: GitHub repo → Settings → Collaborators → Add people
+
+### 2. Pre-Interview Email Template
+
+```
+Subject: Vizzy Labs Interview - Technical Challenge
+
+Hi [Name],
+
+Here's your coding challenge for our upcoming interview:
+
+Repo: [PASTE REPO URL]
+
+Please:
+1. Clone the repo before the interview
+2. Make sure you can run `pip install -r requirements.txt`
+3. Have your AI coding tool ready (Cursor, Copilot, etc.)
+
+The challenge is 15 minutes. We'll discuss your approach afterward.
+
+See you soon!
+```
 
 ---
 
-## Quick Test - AI Automation Challenge
+## Quick Setup Test
+
+### AI Automation Challenge
 
 ```bash
 cd ai-automation-challenge
@@ -65,20 +105,16 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-**Expected:** Server starts but crashes when endpoint is called (service is None)
-
-**Test endpoint:**
+Test endpoint:
 ```bash
 curl -X POST "http://localhost:8000/moderate" \
   -H "Content-Type: application/json" \
-  -d '{"content": "test", "creator_id": "123"}'
+  -d '{"content": "Check out my cooking tutorial!", "creator_id": "chef123"}'
 ```
 
-**Expected:** Error (service not initialized)
+**Expected:** Server starts, returns moderation result (the code WORKS - this is intentional)
 
----
-
-## Quick Test - Mobile Backend Challenge
+### Mobile Backend Challenge
 
 ```bash
 cd mobile-backend-challenge
@@ -86,59 +122,85 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-**Expected:**
-- Server starts
-- Database seeded automatically (100 creators, 1000 videos)
-
-**Test endpoints:**
+Test endpoint:
 ```bash
-# This should be SLOW (3-5 seconds) - that's the bug
-time curl "http://localhost:8000/creators/feed?page=1&page_size=20"
+curl "http://localhost:8000/creators/feed?page=1&page_size=20"
+```
 
-# Health check
-curl "http://localhost:8000/health"
+**Expected:** Server starts, returns feed data (the code WORKS - this is intentional)
+
+---
+
+## Interview Flow Summary
+
+| Phase | Time | What Happens |
+|-------|------|--------------|
+| 1. Setup | 1 min | Confirm screen share, repo cloned |
+| 2. Diagnosis | 3-5 min | Candidate reads README, asks YOU questions |
+| 3. Decision | 2-3 min | Candidate proposes what to build |
+| 4. Implementation | 7-10 min | Candidate codes with AI help |
+| 5. Discussion | 5-7 min | AI Workflow evaluation (CRITICAL!) |
+
+**See `UNIFIED_INTERVIEW_GUIDE.md` for detailed questions and scoring.**
+
+---
+
+## Important: Challenge Philosophy
+
+**❌ These are NOT bug-fixing challenges**
+- The code runs and works
+- There are no obvious bugs to find
+
+**✅ These are DECISION-MAKING challenges**
+- Conflicting business requirements
+- No single "right" answer
+- Tests how candidates make trade-offs
+
+**Key Question: Did they DIRECT AI, or did AI DIRECT them?**
+
+---
+
+## After the Interview
+
+### Remove Candidate Access
+
+```bash
+gh api repos/Vispie-AI/vizzy-ai-automation-challenge/collaborators/GITHUB_USERNAME -X DELETE
+# or
+gh api repos/Vispie-AI/vizzy-mobile-backend-challenge/collaborators/GITHUB_USERNAME -X DELETE
+```
+
+### Submit Evaluation
+
+Complete scoring in `UNIFIED_INTERVIEW_GUIDE.md` and share in #eng-hiring
+
+---
+
+## Syncing Candidate Repos
+
+If you update the challenge code in this main repo, sync to candidate repos:
+
+```bash
+# AI Automation Challenge
+cd /tmp
+rm -rf vizzy-ai-automation-challenge
+git clone git@github.com:Vispie-AI/vizzy-ai-automation-challenge.git
+cp -r /path/to/vizzylabs-code-challenge/ai-automation-challenge/* vizzy-ai-automation-challenge/
+cd vizzy-ai-automation-challenge
+git add -A && git commit -m "Sync from main repo" && git push
+
+# Mobile Backend Challenge
+cd /tmp
+rm -rf vizzy-mobile-backend-challenge
+git clone git@github.com:Vispie-AI/vizzy-mobile-backend-challenge.git
+cp -r /path/to/vizzylabs-code-challenge/mobile-backend-challenge/* vizzy-mobile-backend-challenge/
+cd vizzy-mobile-backend-challenge
+git add -A && git commit -m "Sync from main repo" && git push
 ```
 
 ---
 
-## Interview Flow
-
-### Phase 1: Setup (1 min)
-- Confirm candidate has repo cloned
-- Confirm screen share working
-- Brief overview: "15 min coding, then we'll discuss"
-
-### Phase 2: Coding (15 min)
-**Observe silently:**
-- How they use AI tools
-- Whether they investigate before fixing
-- If they test their changes
-
-**Only intervene if:**
-- Stuck >3 minutes with no progress
-- Completely wrong direction
-
-### Phase 3: AI Workflow Discussion (5-7 min)
-Use questions from AI_WORKFLOW_EVALUATION.md:
-1. "How did you structure your prompts?"
-2. "What was your plan before starting?"
-3. "Explain this code to me" (pick something AI generated)
-
-### Phase 4: Wrap Up (1 min)
-- Thank candidate
-- Explain next steps
-
----
-
-## Evaluation Tools
-
-1. **INTERVIEWER_SCORING_SHEET.md** - Technical + AI Workflow scoring
-2. **AI_WORKFLOW_EVALUATION.md** - Deep dive on AI usage questions
-3. **solutions/SOLUTION_REFERENCE.md** - Expected solutions (for your reference)
-
----
-
-## Common Setup Issues
+## Troubleshooting
 
 ### "No module named 'fastapi'"
 ```bash
@@ -150,47 +212,11 @@ pip install -r requirements.txt
 uvicorn main:app --port 8001
 ```
 
-### "Database not seeding"
+### "Database not seeding" (Mobile Backend)
 Restart the app - seed_data runs on startup
-
----
-
-## Resetting Between Candidates
-
-```bash
-# Reset all code files to original state
-git checkout ai-automation-challenge/
-git checkout mobile-backend-challenge/
-
-# Database is in-memory, resets on restart
-```
-
----
-
-## Key Evaluation Points
-
-### What We're Testing:
-1. **Can they identify problems?** (without hints telling them)
-2. **Do they investigate before asking AI to fix?**
-3. **Do they understand what the AI generates?**
-4. **Can they explain their solution?**
-
-### Red Flags:
-- "Just asked AI to fix everything"
-- Can't explain the code they generated
-- No testing of changes
-- Accepted all AI output without review
-
-### Green Flags:
-- Investigated the problem first
-- Iterated on AI prompts
-- Made corrections to AI output
-- Can explain every piece of code
 
 ---
 
 ## Support
 
-**Questions?**
-- Slack: #eng-hiring
-- Email: hiring@vizzylabs.com
+Questions: #eng-hiring on Slack
