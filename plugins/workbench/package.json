@@ -1,0 +1,15 @@
+{
+  "name": "@lantern/workbench",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.mjs",
+    "./client": { "default": "./lib/client.js" }
+  },
+  "engines": { "dsh": ">=0.2.1-rc.5 <0.3.0" },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": { "platform": "web", "immediately": true }
+  }
+}

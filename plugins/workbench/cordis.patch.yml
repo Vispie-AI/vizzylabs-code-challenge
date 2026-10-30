@@ -1,0 +1,5 @@
+- insert:
+    - id: lantern-workbench
+      name: '@lantern/workbench'
+      config:
+        release: one

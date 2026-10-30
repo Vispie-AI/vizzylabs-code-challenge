@@ -1,0 +1,30 @@
+.workbench-two {
+  position: fixed;
+  z-index: 100;
+  inset: 10vh 5vw 7vh 27vw;
+  overflow: hidden;
+  color: #3b2720;
+  background: #fff3de;
+  border: 1px solid #d58c58;
+  border-radius: 20px;
+  font: 15px/1.45 Georgia, serif;
+  box-shadow: 0 24px 60px #703c2455;
+}
+
+.workbench-two .workbench-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 17px 28px;
+  background: #a84f35;
+  color: #fff6e8;
+}
+
+.workbench-two .workbench-nav a { color: #fff6e8; text-decoration: none; }
+.workbench-two .workbench-body { display: grid; grid-template-columns: 1.2fr .8fr; min-height: 430px; }
+.workbench-two .workbench-studio { display: grid; align-content: start; gap: 15px; padding: 34px; }
+.workbench-two textarea { min-height: 130px; padding: 14px; color: #4b2e25; background: #fffdf8; border: 1px solid #e4b48a; border-radius: 12px; }
+.workbench-two button { width: fit-content; padding: 10px 16px; color: #fff8ed; background: #bd6740; border: 0; border-radius: 999px; }
+.workbench-two .workbench-preview { display: grid; place-items: center; padding: 26px; background: #f6d7a5; }
+.workbench-two canvas { width: 100%; height: auto; border: 7px solid #fff8ed; border-radius: 16px; }
+.workbench-two .workbench-status { color: #8b4e2e; }

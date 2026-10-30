@@ -1,56 +1,60 @@
-# Vizzy Labs Coding Challenge
+# 插件工作区维护作业
 
-Welcome to the Vizzy Labs technical interview! This repository contains coding challenges for engineering positions.
+你接手的是一个基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的小型创作工作区。界面、数据和业务逻辑均为本题独立编写，不需要公司内部系统或模型 API key。
 
----
+用户报告：工作区发布更新后，已经打开的页面与新打开的页面有时不一样；有时界面不完整，正在编辑的内容也受到影响。刷新似乎能改善部分现象，但用户不希望工作被打断。
 
-## Choose Your Challenge
+请自行排查、定位，理解项目如何接入 DSH 的插件架构，设计并实现一个范围相称的解决方案。题目不指定修复方式。
 
-### AI Automation Engineer
-```bash
-cd ai-automation-challenge
+## 环境准备
+
+需要 Node.js 22.15 或以上、npm，以及首次下载公开依赖的网络。建议使用 Node.js 24。DSH 固定为 `0.2.1-rc.5`，项目将它的数据隔离在本目录的 `.dsh-home/`，不会读取你的默认 DSH profile。
+
+```sh
+npm ci
+npm run setup
+npm start
 ```
-Build and fix a content moderation service using AI APIs.
 
-### Mobile Backend Engineer
-```bash
-cd mobile-backend-challenge
+打开启动日志中的本地访问链接（含 DSH 自动生成的临时 token）。另一个终端执行：
+
+```sh
+npm run check
 ```
-Debug performance issues and implement a new endpoint.
 
----
+看到 `Environment ready` 后开始计时。此命令只确认环境可用，不代表报告的问题已经解决。首次安装可能需要几分钟；环境准备不计入作业时间。遇到安装或启动障碍，可以保留错误信息并联系我们。
 
-## Getting Started
+首次打开若出现 DSH 的 **Preview Notice**，点击 **Continue**，再关闭 **Get started** 弹窗（右上角 × 或 Esc）。工作区内可编辑 **Scene notes**，运行 **Run preview**，查看 **Workspace details**。不需要配置模型、发送聊天消息或调用外部服务。
 
-1. Navigate to your challenge directory
-2. Read the README.md in that folder
-3. Follow the setup instructions
-4. Complete the tasks within the time limit
+开发环境提供两套工作区发布版本。服务运行时可在另一终端切换：
 
----
+```sh
+npm run release -- two
+npm run release -- one
+```
 
-## What We're Looking For
+`npm run reset` 将发布状态恢复为 `one`。可通过 `PORT=3082 npm start` 更改端口，对应自检使用 `CHALLENGE_URL=http://127.0.0.1:3082 npm run check`。修改客户端源文件后执行 `npm run build`，停止服务后重新执行 `npm run setup` 和 `npm start`。
 
-- Your problem-solving approach
-- How you use available tools (including AI assistants)
-- Code quality and attention to detail
-- Your ability to explain your decisions
+## 需要达到的用户结果
 
----
+- 工作区正常加载，原有操作仍可使用。
+- 发布更新后，用户看到完整、一致的界面。可以延后切换，也可以安全地切换；请说明你的选择。
+- 旧页面中正在编辑的内容仍可访问，不能靠无条件自动刷新或清空内容来解决问题。
+- 完成发布后，新打开的页面可以使用相应版本。重复发布或回到之前版本时，基本操作仍成立。
+- 有可复现的验证来覆盖报告的现象和你的改动。
 
-## Time Limit
+可以修改本仓库内的实现、结构和测试。保留真实 DSH 插件接入及上述用户行为，不需要开发模型功能、完整插件市场、账户系统或生产部署。现场会给出一项明确的用户约束，到时会说明；未公布的扩展要求不影响作业评分。
 
-**15 minutes** for coding + **5 minutes** for discussion
+## 时间与提交
 
----
+收到题目后五个自然日内，安排最多两小时。阅读、修改、测试和交接说明计入两小时；到时可以停止，说明现状。额外功能和超时投入不加分。
 
-## Notes
+提交代码、相关测试、实际投入时间，以及不超过一页的 `NOTES.md`：
 
-- You can use any AI coding assistant (Cursor, Copilot, Claude, etc.)
-- Feel free to ask clarifying questions
-- Focus on working code first, then optimize if time allows
-- The discussion portion is just as important as the coding
+1. 用几句话给 PM 说明用户影响、现在的结果和剩余限制。
+2. 给接手的工程师说明你的架构理解、定位依据、方案取舍、改动、实际执行的验证及下一步。
+3. 说明 AI 工具的使用方式，以及一项你核验或修正过的建议。未使用 AI、没有遇到错误建议，都可如实说明。
 
----
+欢迎使用 AI。你需要能解释和验证自己的提交；无需提供完整聊天记录、私人账户信息或录屏。后续有约六十分钟的演示、现场续作和交接：其中开头五分钟先自行预测行为，可以阅读代码和文档，暂不使用 AI；后续可以继续使用。
 
-Good luck!
+启动日志、`.dsh-home/` 和 `node_modules/` 无需提交。

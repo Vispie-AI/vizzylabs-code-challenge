@@ -1,0 +1,19 @@
+{
+  "name": "harness-plugin-ui-version-challenge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.15.0" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "setup": "node scripts/manage.mjs setup",
+    "start": "node scripts/manage.mjs start",
+    "release": "node scripts/manage.mjs release",
+    "reset": "node scripts/manage.mjs reset",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.2.1-rc.5",
+    "pnpm": "10.23.0"
+  }
+}
