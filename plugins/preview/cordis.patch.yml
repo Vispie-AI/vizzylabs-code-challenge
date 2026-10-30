@@ -1,0 +1,3 @@
+- insert:
+    - id: lantern-preview
+      name: '@lantern/preview'

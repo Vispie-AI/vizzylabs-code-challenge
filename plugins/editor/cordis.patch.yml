@@ -1,0 +1,3 @@
+- insert:
+    - id: lantern-editor
+      name: '@lantern/editor'

@@ -37,20 +37,22 @@ function run(args, captureLink = false) {
 async function release(value) {
   if (!['one', 'two'].includes(value)) throw new Error('Usage: npm run release -- one|two');
   await access(patch);
-  await build(value);
-  const text = `- id: lantern-workbench\n  config:\n    release: ${value}\n`;
-  if (await readFile(patch, 'utf8') !== text) {
-    await writeFile(patch + '.tmp', text);
-    await rename(patch + '.tmp', patch);
-  }
+  await build();
+  const file = path.join(root, '.artifacts/release.json');
+  await mkdir(path.dirname(file), { recursive: true });
+  const text = JSON.stringify({ release: value }) + '\n';
+  await writeFile(file + '.tmp', text);
+  await rename(file + '.tmp', file);
   console.log(`Workspace release requested: ${value}`);
 }
 
 const command = process.argv[2];
 if (command === 'setup') {
-  await build('one');
+  await build();
   await mkdir(home, { recursive: true });
-  await run(['plugin', '--profile', 'web', 'add', './plugins/workbench']);
+  for (const plugin of ['workbench', 'navigation', 'editor', 'preview']) {
+    await run(['plugin', '--profile', 'web', 'add', `./plugins/${plugin}`]);
+  }
   await release('one');
 } else if (command === 'start') {
   await access(patch);

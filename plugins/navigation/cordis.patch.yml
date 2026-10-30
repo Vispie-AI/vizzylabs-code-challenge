@@ -1,0 +1,3 @@
+- insert:
+    - id: lantern-navigation
+      name: '@lantern/navigation'
